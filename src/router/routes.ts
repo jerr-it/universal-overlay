@@ -4,7 +4,19 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/IndexPage.vue') }],
+    children: [
+      {
+        path: 'bluetooth',
+        name: 'bluetooth',
+        component: () => import('components/BluetoothComponent.vue')
+      },
+      {
+        path: 'process_viewer',
+        name: 'process_viewer',
+        component: () => import('components/ProcessViewerComponent.vue')
+      }
+    ],
+    redirect: { name: 'bluetooth' }
   },
 
   // Always leave this as last one,
