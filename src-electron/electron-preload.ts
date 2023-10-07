@@ -27,3 +27,18 @@
  *   }
  * }
  */
+import { contextBridge } from 'electron';
+import ps from 'ps-node';
+
+contextBridge.exposeInMainWorld('ps', {
+  getProcesses: () => {
+    return new Promise((resolve, reject) => {
+      ps.lookup({}, (err: any, result: unknown) => {
+        if (err) {
+          reject(err);
+        }
+        resolve(result);
+      });
+    });
+  }
+});
