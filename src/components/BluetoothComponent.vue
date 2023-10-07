@@ -2,11 +2,10 @@
 <div style="display: flex; justify-content: center; align-items: center;">
   <div class="column">
     <!--TODO ask david-->
-    <q-avatar v-if="!bt_available" icon="bluetooth" color="grey" style="margin: 5px"></q-avatar>
-    <q-avatar v-if="bt_available" icon="bluetooth" color="blue" style="margin: 5px"></q-avatar>
-<!--    <q-btn v-for="device in bt_devices" :key="device" color="primary" style="margin: 5px">-->
-<!--      {{ device }}-->
-<!--    </q-btn>-->
+    <q-avatar icon="bluetooth" :color="bt_available ? 'blue': 'grey'" style="margin: 5px"></q-avatar>
+    <q-btn v-for="device in bt_devices" :key="device.mac_address" color="primary" style="margin: 5px">
+      {{ device.properties["Name"] }}
+    </q-btn>
   </div>
 </div>
 </template>

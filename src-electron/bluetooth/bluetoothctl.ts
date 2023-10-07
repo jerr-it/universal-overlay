@@ -32,19 +32,22 @@ class Bluetoothctl {
         }
     }
 
-
     public getDevices(): DeviceInfo[] {
         const proc = process.spawnSync('bluetoothctl', ['devices']);
 
         const devices: DeviceInfo[] = [];
         for (const line of proc.stdout.toString().split('\n')) {
             if (line.startsWith('Device')) {
-                const [_, mac_address, __] = line.split(' ');
+                const [_, mac_address, name] = line.split(' ');
+                if (mac_address === name.replaceAll("-", ":")) {
+                    continue;
+                }
+
                 const device_data = process.spawnSync('bluetoothctl', ['info', mac_address]);
                 devices.push(new DeviceInfo(mac_address, device_data.stdout.toString()));
             }
         }
-
+        console.log(devices[0]);
         return devices;
     }
 }
