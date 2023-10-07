@@ -27,8 +27,15 @@
  *   }
  * }
  */
-import { contextBridge } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron';
 import ps from 'ps-node';
+
+contextBridge.exposeInMainWorld('bluetooth', {
+    isAvailable: () => ipcRenderer.invoke('bt-available'),
+    scanOn: () => ipcRenderer.invoke('bt-scan-on'),
+    scanOff: () => ipcRenderer.invoke('bt-scan-off'),
+    getDevices: () => ipcRenderer.invoke('bt-get-devices'),
+})
 
 contextBridge.exposeInMainWorld('ps', {
   getProcesses: () => {

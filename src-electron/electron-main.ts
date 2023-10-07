@@ -1,11 +1,14 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 import os from 'os';
+import Bluetoothctl from 'app/src-electron/bluetooth/bluetoothctl';
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform();
 
 let mainWindow: BrowserWindow | undefined;
+
+const bluetoothctl = new Bluetoothctl();
 
 function createWindow() {
   /**
@@ -41,7 +44,25 @@ function createWindow() {
   });
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(() => {
+  ipcMain.handle('bt-available', () => {
+    return bluetoothctl.available;
+  });
+
+  ipcMain.handle('bt-scan-on', () => {
+    bluetoothctl.scanOn();
+  });
+
+  ipcMain.handle('bt-scan-off', () => {
+    bluetoothctl.scanOff();
+  });
+
+  ipcMain.handle('bt-get-devices', () => {
+    return bluetoothctl.getDevices();
+  });
+
+  createWindow();
+});
 
 app.on('window-all-closed', () => {
   if (platform !== 'darwin') {
