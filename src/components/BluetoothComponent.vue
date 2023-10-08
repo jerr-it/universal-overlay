@@ -6,14 +6,23 @@
         <div class="q-body-1">{{category[0]}}</div>
       </div>
       <q-list bordered class="rounded-borders" style="width: 100%; margin-bottom: 5px;">
-        <q-expansion-item v-for="device in category[2]()" :key="device"
-                          expand-separator
-                          :label="device.properties['Name']"
-                          :caption="device.mac_address"
-                          :icon="btIconMap[device.properties['Icon']]"
-        >
-          <a>Lorem ipsum</a>
-        </q-expansion-item>
+        <q-item v-for="device in category[2]()" :key="device.address">
+          <q-item-section avatar>
+            <q-icon :name="btIconMap[device.properties['Icon']]" class="primary" size="30px"/>
+          </q-item-section>
+          <q-item-section>
+            <q-item-label>{{device.properties['Name']}}</q-item-label>
+            <q-item-label caption>{{device.mac_address}}</q-item-label>
+          </q-item-section>
+          <q-item-section side>
+            <div class="row">
+              <q-btn v-if="category[0] == 'Connected'" color="red" icon="bluetooth_disabled" label="Disconnect" style="margin-left: 5px"/>
+              <q-btn v-if="category[0] == 'Paired' || category[0] == 'Available'" color="primary" icon="bluetooth" label="Connect" style="margin-left: 5px"/>
+              <q-btn v-if="category[0] == 'Blocked'" color="primary" icon="settings_input_antenna" label="Unblock" style="margin-left: 5px"/>
+              <q-btn v-else color="red" icon="block" label="Block" style="margin-left: 5px"/>
+            </div>
+          </q-item-section>
+        </q-item>
       </q-list>
     </div>
   </div>
