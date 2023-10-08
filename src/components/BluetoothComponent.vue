@@ -31,19 +31,19 @@ const categories: [string, () => DeviceInfo[]][] = [
   ['Blocked', get_blocked_devices],
 ];
 
-function get_connected_devices() {
+function get_connected_devices(): DeviceInfo[] {
   return bt_devices.value.filter((device) => device.properties['Connected'] === 'yes');
 }
 
-function get_paired_devices() {
+function get_paired_devices(): DeviceInfo[] {
   return bt_devices.value.filter((device) => device.properties['Paired'] === 'yes' && device.properties['Connected'] === 'no');
 }
 
-function get_unpaired_devices() {
+function get_unpaired_devices(): DeviceInfo[] {
   return bt_devices.value.filter((device) => device.properties['Paired'] === 'no');
 }
 
-function get_blocked_devices() {
+function get_blocked_devices(): DeviceInfo[] {
   return bt_devices.value.filter((device) => device.properties['Blocked'] === 'yes');
 }
 
