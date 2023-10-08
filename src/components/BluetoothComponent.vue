@@ -1,9 +1,12 @@
 <template>
   <div class="column" style="padding: 10px; width: 100%">
-    <div v-for="category in categories" :key="category">
-      <div class="q-body-1">{{category[0]}}</div>
-      <q-list bordered class="rounded-borders" style="width: 100%">
-        <q-expansion-item v-for="device in category[1]()" :key="device"
+    <div v-for="category in categories" :key="category" style="margin-bottom: 5px">
+      <div class="row">
+        <q-icon :name="category[1]" class="text-primary" style="margin-right: 10px" size="20px"/>
+        <div class="q-body-1">{{category[0]}}</div>
+      </div>
+      <q-list bordered class="rounded-borders" style="width: 100%; margin-bottom: 5px;">
+        <q-expansion-item v-for="device in category[2]()" :key="device"
                           expand-separator
                           :label="device.properties['Name']"
                           :caption="device.mac_address"
@@ -24,11 +27,11 @@ import btIconMap from "app/src-electron/bluetooth/icon-map";
 let bt_available = ref<boolean>(false);
 let bt_devices = ref<DeviceInfo[]>([]);
 
-const categories: [string, () => DeviceInfo[]][] = [
-  ['Connected', get_connected_devices],
-  ['Paired', get_paired_devices],
-  ['Available', get_unpaired_devices],
-  ['Blocked', get_blocked_devices],
+const categories: [string, string, () => DeviceInfo[]][] = [
+  ['Connected', 'bluetooth_connected', get_connected_devices],
+  ['Paired', 'link', get_paired_devices],
+  ['Available', 'bluetooth_searching', get_unpaired_devices],
+  ['Blocked', 'block', get_blocked_devices],
 ];
 
 function get_connected_devices(): DeviceInfo[] {
