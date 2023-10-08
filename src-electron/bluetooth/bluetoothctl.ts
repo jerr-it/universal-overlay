@@ -47,7 +47,7 @@ class Bluetoothctl {
                 devices.push(new DeviceInfo(mac_address, device_data.stdout.toString()));
             }
         }
-        console.log(devices[0]);
+
         return devices;
     }
 }

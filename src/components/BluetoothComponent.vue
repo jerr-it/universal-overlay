@@ -1,34 +1,48 @@
 <template>
-<div style="display: flex; justify-content: center; align-items: center;">
-  <div class="column">
-    <!--TODO ask david-->
-    <q-avatar icon="bluetooth" :color="bt_available ? 'blue': 'grey'" style="margin: 5px"></q-avatar>
-    <q-btn v-for="device in bt_devices" :key="device.mac_address" color="primary" style="margin: 5px">
-      {{ device.properties["Name"] }}
-    </q-btn>
+  <div class="column" style="padding: 10px">
+    <q-list bordered class="rounded-borders">
+      <q-expansion-item v-for="device in bt_devices" :key="device"
+        expand-separator
+        :label="device.properties['Name']"
+        :caption="device.mac_address"
+        :icon="btIconMap[device.properties['Icon']]"
+      >
+        <a>Lorem ipsum</a>
+      </q-expansion-item>
+    </q-list>
   </div>
-</div>
 </template>
 
 <script setup lang="ts">
 import {onMounted, onUnmounted, ref} from 'vue';
 import DeviceInfo from "app/src-electron/bluetooth/device-info";
+import btIconMap from "app/src-electron/bluetooth/icon-map";
 
 let bt_available = ref<boolean>(false);
 let bt_devices = ref<DeviceInfo[]>([]);
 
 const intervalID = setInterval(async () => {
+  if (!bt_available.value) {
+    return;
+  }
+
   bt_devices.value = await window.bluetooth.getDevices();
 }, 5000);
 
 onMounted(async () => {
   bt_available.value = await window.bluetooth.isAvailable();
+  if (!bt_available.value) {
+    return;
+  }
+
   await window.bluetooth.scanOn();
   bt_devices.value = await window.bluetooth.getDevices();
 });
 
 onUnmounted(async () => {
-  await window.bluetooth.scanOff();
+  if (bt_available.value){
+    await window.bluetooth.scanOff();
+  }
   clearInterval(intervalID);
 });
 

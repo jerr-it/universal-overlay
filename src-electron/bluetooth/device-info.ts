@@ -1,11 +1,11 @@
 
 
 class DeviceInfo {
-    private readonly mac_addr: string;
+    public readonly mac_address: string;
     public properties: { [key: string]: string };
 
     constructor(mac_address: string, cli_output: string) {
-        this.mac_addr = mac_address;
+        this.mac_address = mac_address;
 
         const lines: string[] = cli_output.split('\n');
         lines.shift();
@@ -19,10 +19,6 @@ class DeviceInfo {
             const [key, value] = line.split(': ');
             this.properties[key.trim()] = value.trim();
         }
-    }
-
-    public get mac_address(): string {
-        return this.mac_addr;
     }
 }
 
