@@ -6,7 +6,7 @@
         <div class="q-body-1">{{category[0]}}</div>
       </div>
       <q-list bordered class="rounded-borders" style="width: 100%; margin-bottom: 5px;">
-        <q-item v-for="device in category[2]()" :key="device.address">
+        <q-item v-for="device in category[2]()" :key="device.mac_address">
           <q-item-section avatar>
             <q-icon :name="btIconMap[device.properties['Icon']]" class="primary" size="30px"/>
           </q-item-section>
