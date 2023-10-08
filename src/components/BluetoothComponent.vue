@@ -8,10 +8,10 @@
       <q-list bordered class="rounded-borders" style="width: 100%; margin-bottom: 5px;">
         <q-item v-for="device in category[2]()" :key="device.mac_address">
           <q-item-section avatar>
-            <q-icon :name="btIconMap[device.properties['Icon']]" class="primary" size="30px"/>
+            <q-icon :name="btIconMap[device.icon]" class="primary" size="30px"/>
           </q-item-section>
           <q-item-section>
-            <q-item-label>{{device.properties['Name']}}</q-item-label>
+            <q-item-label>{{device.name}}</q-item-label>
             <q-item-label caption>{{device.mac_address}}</q-item-label>
           </q-item-section>
           <q-item-section side>
@@ -44,19 +44,19 @@ const categories: [string, string, () => DeviceInfo[]][] = [
 ];
 
 function get_connected_devices(): DeviceInfo[] {
-  return bt_devices.value.filter((device) => device.properties['Connected'] === 'yes');
+  return bt_devices.value.filter((device) => device.connected);
 }
 
 function get_paired_devices(): DeviceInfo[] {
-  return bt_devices.value.filter((device) => device.properties['Paired'] === 'yes' && device.properties['Connected'] === 'no');
+  return bt_devices.value.filter((device) => device.paired && !device.connected);
 }
 
 function get_unpaired_devices(): DeviceInfo[] {
-  return bt_devices.value.filter((device) => device.properties['Paired'] === 'no');
+  return bt_devices.value.filter((device) => !device.paired);
 }
 
 function get_blocked_devices(): DeviceInfo[] {
-  return bt_devices.value.filter((device) => device.properties['Blocked'] === 'yes');
+  return bt_devices.value.filter((device) => device.blocked);
 }
 
 const intervalID = setInterval(async () => {
