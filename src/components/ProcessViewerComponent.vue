@@ -18,9 +18,7 @@ import * as process from "process";
 const processes: Ref<any[]> = ref([])
 
 onMounted(() => {
-  window.ps.getProcesses().then((result: any) => {
-    processes.value = result
-  })
+  processes.value = window.ps.getProcesses()
 })
 
 </script>
