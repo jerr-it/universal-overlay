@@ -51,9 +51,9 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, Ref, ref } from "vue";
+import { onBeforeUnmount, Ref, ref } from 'vue';
 import { onMounted } from 'vue'
-import {Ps, Process} from "app/src-electron/process-viewer/process-viewer";
+import {Process} from 'app/src-electron/process-viewer/process-viewer';
 
 const processes: Ref<Process[]> = ref([])
 let getProcessesIntervalId: NodeJS.Timeout | null = null

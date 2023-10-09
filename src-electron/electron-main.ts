@@ -1,12 +1,17 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, Menu, Tray } from 'electron';
 import path from 'path';
 import os from 'os';
+import { EvdevEventType, Gamepad } from "app/src-electron/gamepad/gamepad";
 import Bluetoothctl from 'app/src-electron/bluetooth/bluetoothctl';
+
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform();
 
 let mainWindow: BrowserWindow | undefined;
+let tray: Tray | null = null;
+let visible = true;
+let gamepad: Gamepad | null = null;
 
 const bluetoothctl = new Bluetoothctl();
 
@@ -16,8 +21,8 @@ function createWindow() {
    */
   mainWindow = new BrowserWindow({
     icon: path.resolve(__dirname, 'icons/icon.png'), // tray icon
-    width: 1000,
-    height: 600,
+    width: 1920,
+    height: 1080,
     useContentSize: true,
     webPreferences: {
       nodeIntegration: true,
@@ -39,9 +44,24 @@ function createWindow() {
     });
   }
 
-  mainWindow.on('closed', () => {
-    mainWindow = undefined;
+  toggleVisibility();
+  gamepad = new Gamepad()
+  gamepad.on(EvdevEventType.KEYS, (data) => {
+    if(data.code === 'BTN_MODE' && data.value === 1) {
+      toggleVisibility();
+    }
   });
+
+}
+
+function toggleVisibility() {
+  if (visible) {
+    mainWindow?.hide();
+  } else {
+    mainWindow?.show();
+    //mainWindow?.setFullScreen(true);
+  }
+  visible = !visible;
 }
 
 app.whenReady().then(() => {
@@ -64,11 +84,23 @@ app.whenReady().then(() => {
   createWindow();
 });
 
+
+app.whenReady().then(() => {
+  tray = new Tray('src-electron/icons/icon.png')
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Hide/Show', click: () => toggleVisibility() },
+    { label: 'Quit', click: () => {
+      tray?.destroy();
+      app.quit();
+    } }
+  ])
+  tray.setContextMenu(contextMenu)
+  tray.setToolTip('Universal Overlay')
+})
+
 app.on('window-all-closed', () => {
-  if (platform !== 'darwin') {
-    app.quit();
-  }
-});
+  app.quit();
+})
 
 app.on('activate', () => {
   if (mainWindow === undefined) {
