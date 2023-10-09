@@ -1,5 +1,11 @@
 <template>
-  <div class="column" style="padding: 10px; width: 100%">
+  <div v-if="!bt_available" class="column" style="justify-content: center; align-items: center; width: 100%">
+    <div class="row" style="justify-content: center; align-items: center">
+      <q-avatar icon="bluetooth_disabled" size="50px" color="grey" style="margin-right: 10px"/>
+      <div class="q-header-3">Bluetooth is not available</div>
+    </div>
+  </div>
+  <div v-else class="column" style="padding: 10px; width: 100%">
     <div v-for="category in categories" :key="category" style="margin-bottom: 5px">
       <div class="row">
         <q-icon :name="category[1]" class="text-primary" style="margin-right: 10px" size="20px"/>
