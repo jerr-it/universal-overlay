@@ -28,7 +28,7 @@
  * }
  */
 import { contextBridge, ipcRenderer } from 'electron';
-import Ps  from './process-viewer/process-viewer';
+import { Process, Ps } from "./process-viewer/process-viewer";
 
 contextBridge.exposeInMainWorld('bluetooth', {
     isAvailable: () => ipcRenderer.invoke('bt-available'),
@@ -39,4 +39,6 @@ contextBridge.exposeInMainWorld('bluetooth', {
 
 contextBridge.exposeInMainWorld('ps', {
   getProcesses: () => new Ps().getProcesses(),
+  killProcess: (pid: number) => Process.kill(pid),
+  quitProcess: (pid: number) => Process.quit(pid),
 });
