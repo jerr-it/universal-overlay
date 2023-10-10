@@ -46,7 +46,7 @@ function createWindow() {
 
   toggleVisibility();
   gamepad = new Gamepad()
-  gamepad.on(EvdevEventType.KEYS, (data) => {
+  gamepad.onEvent(EvdevEventType.KEYS, (data) => {
     if(data.code === 'BTN_MODE' && data.value === 1) {
       toggleVisibility();
     }
