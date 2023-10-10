@@ -35,6 +35,7 @@ contextBridge.exposeInMainWorld('bluetooth', {
     scanOn: () => ipcRenderer.invoke('bt-scan-on'),
     scanOff: () => ipcRenderer.invoke('bt-scan-off'),
     getDevices: () => ipcRenderer.invoke('bt-get-devices'),
+    tryConnect: (mac_address: string) => ipcRenderer.invoke('bt-try-connect', mac_address),
 })
 
 contextBridge.exposeInMainWorld('ps', {

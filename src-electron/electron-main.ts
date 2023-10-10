@@ -61,6 +61,10 @@ app.whenReady().then(() => {
     return bluetoothctl.getDevices();
   });
 
+  ipcMain.handle('bt-try-connect', (event, mac_address) => {
+    return bluetoothctl.try_connect(mac_address);
+  });
+
   createWindow();
 });
 

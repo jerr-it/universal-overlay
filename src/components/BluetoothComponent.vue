@@ -23,7 +23,7 @@
           <q-item-section side>
             <div class="row">
               <q-btn v-if="category[0] == 'Connected'" color="red" icon="bluetooth_disabled" label="Disconnect" style="margin-left: 5px"/>
-              <q-btn v-if="category[0] == 'Paired' || category[0] == 'Available'" color="primary" icon="bluetooth" label="Connect" style="margin-left: 5px"/>
+              <q-btn v-if="category[0] == 'Paired' || category[0] == 'Available'" @click="onclick_tryConnect(device.mac_address)" color="primary" icon="bluetooth" label="Connect" style="margin-left: 5px"/>
               <q-btn v-if="category[0] == 'Blocked'" color="primary" icon="settings_input_antenna" label="Unblock" style="margin-left: 5px"/>
               <q-btn v-else color="red" icon="block" label="Block" style="margin-left: 5px"/>
             </div>
@@ -64,6 +64,16 @@ function get_unpaired_devices(): DeviceInfo[] {
 function get_blocked_devices(): DeviceInfo[] {
   return bt_devices.value.filter((device) => device.blocked);
 }
+
+function onclick_tryConnect(mac_address: string): void {
+  window.bluetooth.tryConnect(mac_address)
+    .then(async () => {
+      bt_devices.value = await window.bluetooth.getDevices();
+    }).catch((error: string) => {
+      console.log(error + " (" + mac_address + ")");
+    });
+}
+
 
 const intervalID = setInterval(async () => {
   if (!bt_available.value) {
