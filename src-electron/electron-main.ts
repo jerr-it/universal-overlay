@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, Tray } from 'electron';
+import { app, BrowserWindow, Menu, Tray, ipcMain } from 'electron';
 import path from 'path';
 import os from 'os';
 import { EvdevEventType, Gamepad } from "app/src-electron/gamepad/gamepad";
